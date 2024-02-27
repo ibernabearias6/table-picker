@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Lato } from "next/font/google";
 import "./globals.css";
+import Image from 'next/image';
 
-const inter = Inter({ subsets: ["latin"] });
+const lato = Lato({
+  subsets: ["latin"],
+  weight: ["100", "300", "400", "700", "900"],
+  style: ["normal", "italic"]
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +21,27 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={lato.className}>
+      <div className="bg-violet-950 h-screen relative">
+      <Image
+        src="/img/top-decoration.svg"
+        className="w-full bg-transparent -mt-[7rem] absolute"
+        width={50}
+        height={50}
+        alt='image'
+      />
+        {children}
+      <div className="flex justify-center">
+        <Image
+          src="/img/bottom-decoration.svg"
+          className="fixed bottom-0"
+          width={350}
+          height={350}
+          alt='image'
+        />
+      </div>
+    </div>
+      </body>
     </html>
   );
 }
