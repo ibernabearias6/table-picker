@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .link {
+        @apply no-underline underline-offset-8 opacity-[50%] hover:underline hover:text-white hover:opacity-100;
+    }
+
+    .link-active {
+        @apply underline text-white opacity-100;
+    }
+}
