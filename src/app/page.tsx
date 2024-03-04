@@ -12,7 +12,7 @@ export default function HomePage() {
         alt="image"
       />
       <nav className="flex justify-end pr-48 gap-8 font-[400] pt-12">
-        <Link className="link" href="/auth/signup">
+        <Link className="link" href="auth/signup">
           Sign Up
         </Link>
       </nav>
