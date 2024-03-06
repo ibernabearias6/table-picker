@@ -1,7 +1,6 @@
 "use client";
 
 import Input from "@/components/Input";
-import Select from "@/components/Select";
 
 export default function NewReservationPage() {
   return (
@@ -11,7 +10,7 @@ export default function NewReservationPage() {
         Book your reservation at the place and time you want
       </p>
       <div className="grid grid-cols-2 row-auto mt-10 gap-10 w-2/3">
-        <Select
+        {/* <Select
           value={""}
           options={[]}
           theme="secondary"
@@ -26,7 +25,7 @@ export default function NewReservationPage() {
           label="Table"
           name="table"
           onSelect={(e) => {}}
-        />
+        /> */}
         <Input
           value={""}
           type="number"

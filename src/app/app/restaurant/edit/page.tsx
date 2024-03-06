@@ -21,14 +21,14 @@ export default function NewRestaurantPage() {
           disabled={false}
           onChange={(e) => {}}
         />
-        <Select
+        {/* <Select
           value={""}
           options={[]}
           theme="secondary"
           label="Available"
           name="available"
           onSelect={() => {}}
-        />
+        /> */}
       </div>
       <h2 className="text-2xl text-zinc-500 my-5">Tables</h2>
       <div className="grid grid-cols-3 row-auto mt-5 gap-x-10 gap-y-5 w-2/3">
@@ -52,14 +52,14 @@ export default function NewRestaurantPage() {
           disabled={false}
           onChange={(e) => {}}
         />
-        <Select
+        {/* <Select
           value={""}
           options={[]}
           theme="secondary"
           label="Available"
           name="available"
           onSelect={() => {}}
-        />
+        /> */}
       </div>
       <button
         type="submit"

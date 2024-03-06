@@ -1,10 +1,11 @@
 "use client";
 
 import Input from "@/components/Input";
-import Select from '@/components/Select';
+import Select from "@/components/Select";
+import { UserCreate } from "@/models/user.interface";
 import Image from "next/image";
 import Link from "next/link";
-import { ChangeEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 
 interface FormData {
   name: string;
@@ -13,8 +14,9 @@ interface FormData {
   email: string;
   userName: string;
   password: string;
+  confirmPassword: string;
   type: string;
-  restaurantName: string | undefined;
+  restaurantName: string;
 }
 
 export default function SignUpPage() {
@@ -25,22 +27,67 @@ export default function SignUpPage() {
     email: "",
     userName: "",
     password: "",
+    confirmPassword: "",
     type: "",
     restaurantName: "",
   });
+
   const typeOptions = [
     {
-        label: "User",
-        value: "user",
+      label: "User",
+      value: "user",
     },
     {
-        label: "Restaurant",
-        value: "restaurant",
+      label: "Restaurant",
+      value: "restaurant",
     },
   ];
 
-  const onInputChange = (e:any) => {
-    console.log(e);
+  const isFormValid = () => {
+    let isValid =
+      !!form.name &&
+      !!form.lastName &&
+      !!form.phone &&
+      !!form.email &&
+      !!form.userName &&
+      !!form.password &&
+      !!form.confirmPassword &&
+      form.password === form.confirmPassword;
+
+    if (form.type === "restaurant") {
+      isValid = !!form.restaurantName;
+    }
+    return isValid;
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const payload: UserCreate = {
+      user: form.userName,
+      password: form.password,
+      type: form.type === "restaurant" ? "Adm" : "User",
+      name: form.name,
+      lastName: form.lastName,
+      phone: form.phone,
+      email: form.email,
+      restaurantName: form.restaurantName,
+    };
+    const response = await fetch("/api/user", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const user = await response.json();
+    console.log(user, response);
+  };
+
+  const onInputChange = (name: string, value: string) => {
+    setForm({
+      ...form,
+      [name]: value,
+    });
   };
 
   return (
@@ -51,13 +98,13 @@ export default function SignUpPage() {
         <div className="flex gap-2 mt-2 tracking-wide font-light">
           <p className="text-zinc-400">Already a member?</p>
           <Link
-            href="auth/login"
+            href="login"
             className="text-violet-600 underline-offset-8 hover:underline"
           >
             Log In
           </Link>
         </div>
-        <form className="mt-8 w-[650px]">
+        <form className="mt-8 w-[650px]" onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 row-auto gap-4">
             <Input
               value={form.name}
@@ -65,94 +112,91 @@ export default function SignUpPage() {
               theme="primary"
               label="Name"
               name="name"
-              placeholder=""
               disabled={false}
-              onChange={onInputChange}
+              onChange={(e) => onInputChange(e.target.name, e.target.value)}
             />
             <Input
-              value={form.name}
+              value={form.lastName}
               type="text"
               theme="primary"
               label="Last Name"
-              name="lastname"
-              placeholder=""
+              name="lastName"
               disabled={false}
-              onChange={onInputChange}
+              onChange={(e) => onInputChange(e.target.name, e.target.value)}
             />
             <Input
-              value={form.name}
+              value={form.phone}
               type="number"
               theme="primary"
               label="Phone"
               name="phone"
-              placeholder=""
               disabled={false}
-              onChange={onInputChange}
+              onChange={(e) => onInputChange(e.target.name, e.target.value)}
             />
             <Input
-              value={form.name}
+              value={form.email}
               type="email"
               theme="primary"
               label="Email"
               name="email"
-              placeholder=""
               disabled={false}
-              onChange={onInputChange}
+              onChange={(e) => onInputChange(e.target.name, e.target.value)}
             />
             <Input
-              value={form.name}
+              value={form.userName}
               type="text"
               theme="primary"
               label="User Name"
-              name="username"
-              placeholder=""
+              name="userName"
               disabled={false}
-              onChange={onInputChange}
+              onChange={(e) => onInputChange(e.target.name, e.target.value)}
             />
             <Input
-              value={form.name}
+              value={form.password}
               type="password"
               theme="primary"
               label="Password"
               name="password"
-              placeholder=""
-              error={false}
               disabled={false}
-              onChange={onInputChange}
+              onChange={(e) => onInputChange(e.target.name, e.target.value)}
             />
             <Input
-              value={form.name}
+              value={form.confirmPassword}
               type="password"
               theme="primary"
               label="Confirm Password"
-              name="confirmpassword"
-              placeholder=""
-              error={false}
+              name="confirmPassword"
+              error={form.password !== form.confirmPassword}
+              messageError="Must be equal to password field"
               disabled={false}
-              onChange={onInputChange}
+              onChange={(e) => onInputChange(e.target.name, e.target.value)}
             />
             <Select
-                value={form.type}
-                options={typeOptions}
-                theme="primary"
-                label="Type"
-                name="type"
-                onSelect={onInputChange}
-            />
-            <Input
-              value={form.name}
-              type="text"
+              value={form.type}
+              options={typeOptions}
               theme="primary"
-              label="Restaurant Name"
-              name="restaurantName"
-              placeholder=""
-              disabled={false}
-              onChange={onInputChange}
+              label="Type"
+              name="type"
+              onSelect={(e) =>
+                onInputChange(e.currentTarget.name, e.currentTarget.value)
+              }
             />
+            {form.type === "restaurant" && (
+              <Input
+                value={form.restaurantName}
+                type="text"
+                theme="primary"
+                label="Restaurant Name"
+                name="restaurantName"
+                disabled={false}
+                onChange={(e) => onInputChange(e.target.name, e.target.value)}
+              />
+            )}
           </div>
           <button
             type="submit"
-            className="bg-violet-600 rounded-2xl p-2 w-[250px] mt-8"
+            className="bg-violet-600 rounded-2xl p-2 w-[250px] mt-8 disabled:opacity-60"
+            disabled={!isFormValid()}
           >
             Create Acccount
           </button>

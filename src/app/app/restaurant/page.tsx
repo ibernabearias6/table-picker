@@ -1,12 +1,17 @@
 "use client";
 
 import { Search, Pencil, Trash } from "lucide-react";
+
 export default function RestaurantsPage() {
   return (
     <div className="mt-8">
       <h1 className="text-violet-950 text-4xl">Restaurants</h1>
-      <div className="flex items-center justify-between px-4 py-2 mt-6 mb-8 bg-zinc-50 border border-zinc-300 rounded-md">
-        <input type="text" placeholder="Search by name..." />
+      <div className="flex items-center justify-between pr-4 mt-6 mb-8 bg-zinc-50 border border-zinc-300 rounded-md">
+        <input
+          type="text"
+          className="py-2 outline-none bg-transparent w-full px-4"
+          placeholder="Search by name..."
+        />
         <Search className="text-violet-950" size={16} />
       </div>
       <div className="rounded-md mt-5 overflow-hidden w-full">

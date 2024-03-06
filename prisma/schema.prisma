@@ -23,7 +23,7 @@ model User {
   name        String
   lastName    String
   phone       String
-  email       String @unique
+  email       String
   type        UserType @relation(fields: [typeId], references: [id])
   restaurants Restaurant[]
   reservations Reservation[]

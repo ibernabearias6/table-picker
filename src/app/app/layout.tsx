@@ -17,13 +17,19 @@ export default function AppLayout({
           Home
         </Link>
         <Link className="link" href="/app/reservation/new">
-        Add Reservation
+          Add Reservation
         </Link>
+        {/* <Link className="link" href="/app/reservation">
+          My Reservation
+        </Link> */}
         <Link className="link" href="/app/reservation">
-        My Reservation
+          All Reservations
         </Link>
-        <Link className="link" href="/app/reservation">
-        All Reservations
+        <Link className="link" href="/app/restaurant/edit">
+          Add Restaurant
+        </Link>
+        <Link className="link" href="/app/restaurant">
+          All Restaurants
         </Link>
       </NavBar>
       <main className="px-16">{children}</main>

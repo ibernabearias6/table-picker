@@ -23,7 +23,7 @@ export default function LogInPage() {
         <div className="flex gap-2 mt-2 tracking-wide font-light">
           <p className="text-zinc-400">Haven&apos;t a account?</p>
           <Link
-            href="auth/signup"
+            href="signup"
             className="text-violet-600 underline-offset-8 hover:underline"
           >
             Sign up

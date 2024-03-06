@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Pencil, Trash, Plus } from "lucide-react";
+import { Search, Plus } from "lucide-react";
 export default function ReservationsPage() {
   return (
     <div className="mt-8">

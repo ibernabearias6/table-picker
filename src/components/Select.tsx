@@ -1,5 +1,5 @@
 "use client";
-import { SyntheticEvent } from "react";
+import { ChangeEvent, ChangeEventHandler, SyntheticEvent } from "react";
 
 interface SelectProps {
   value: string;
@@ -10,7 +10,7 @@ interface SelectProps {
   error?: boolean;
   messageError?: string;
   disabled?: boolean;
-  onSelect: (event: SyntheticEvent<HTMLSelectElement, Event>) => void;
+  onSelect: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
 export default function Select({
@@ -33,8 +33,8 @@ export default function Select({
           {label}
         </label>
         <select
-          // value={value}
-          // onSelect={onSelect}
+          value={value}
+          onChange={(e) => onSelect(e)}
           name={name}
           disabled={disabled}
           id={name}

@@ -8,7 +8,7 @@ interface InputProps {
   label: string;
   value: string | number;
   name: string;
-  placeholder: string;
+  placeholder?: string;
   error?: boolean;
   messageError?: string;
   disabled?: boolean;
@@ -23,7 +23,7 @@ export default function Input({
   name,
   placeholder,
   error,
-  messageError,
+  messageError = "Missing field",
   disabled,
   onChange,
 }: InputProps) {
