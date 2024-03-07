@@ -1,10 +1,10 @@
 "use client";
-
 import Input from "@/components/Input";
 import MainButton from "@/components/MainButton";
 import Select from "@/components/Select";
+import { getUserInStore } from "@/lib/user";
 import { ReservationCreate } from "@/models/reservation.interface";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -12,10 +12,10 @@ interface FormData {
   tableId: string;
   restaurantId: string;
   date: string;
-  userId: string;
 }
 
 export default function NewReservationPage() {
+  const [formErrors, setFormError] = useState({});
   const [formLoading, setFormLoading] = useState(false);
   const [restaurants, setRestaurants] = useState<any[]>([]);
   const router = useRouter();
@@ -23,17 +23,22 @@ export default function NewReservationPage() {
     tableId: "",
     restaurantId: "",
     date: "",
-    userId: "",
   });
+
+  const hasFieldError = (field: string) => {
+    return formErrors.hasOwnProperty(field);
+  };
 
   const isFormValid = () => {
     return !!form.date && !!form.tableId;
   };
 
   const handleSubmit = async () => {
+    setFormError({});
     setFormLoading(true);
+    const user = getUserInStore();
     const payload: ReservationCreate = {
-      userId: "",
+      userId: user.id,
       date: form.date,
       tableId: form.tableId,
     };
@@ -44,12 +49,15 @@ export default function NewReservationPage() {
         "Content-Type": "application/json",
       },
     });
+    const result = await response.json();
     setFormLoading(false);
-    if (response.status === 200) {
-      router.push("");
+
+    if ((result as object).hasOwnProperty("error")) {
+      setFormError({ ...formErrors, ...result.error });
+    } else {
       toast("Reservation Created!");
+      router.push("/home/reservation");
     }
-    console.log(form);
   };
 
   const onInputChange = (name: string, value: string) => {
@@ -57,6 +65,7 @@ export default function NewReservationPage() {
       ...form,
       [name]: value,
     });
+    console.log(form);
   };
 
   const getRestaurantOptions = async () => {
@@ -80,7 +89,7 @@ export default function NewReservationPage() {
   const tableOptions = () => {
     const restaurant = restaurants.find((x) => x.id === form.restaurantId);
     return restaurant?.tables.map((x: any) => ({
-      label: `${x.name} - ${x.capacity} persons`,
+      label: `Order: ${x.order} - Capacity: ${x.capacity}`,
       value: x.id,
     }));
   };
@@ -97,11 +106,11 @@ export default function NewReservationPage() {
       </p>
       <div className="grid grid-cols-2 row-auto mt-10 gap-10 w-2/3">
         <Select
-          value={form.tableId}
+          value={form.restaurantId}
           options={restaurantOptions() || []}
           theme="secondary"
           label="Restaurant"
-          name="tableId"
+          name="restaurantId"
           disabled={formLoading}
           onSelect={(e) => onInputChange(e.target.name, e.target.value)}
         />
@@ -120,12 +129,15 @@ export default function NewReservationPage() {
           theme="secondary"
           label="Date"
           name="date"
+          error={hasFieldError("date")}
+          messageError="This hour is not available"
           disabled={formLoading}
           onChange={(e) => onInputChange(e.target.name, e.target.value)}
         />
       </div>
       <MainButton
         title="Create Reservation"
+        type="button"
         loading={formLoading}
         disabled={!isFormValid()}
         method={() => handleSubmit()}

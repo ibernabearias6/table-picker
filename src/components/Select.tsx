@@ -1,9 +1,9 @@
 "use client";
-import { ChangeEvent, ChangeEventHandler, SyntheticEvent } from "react";
+import { ChangeEvent } from "react";
 
 interface SelectProps {
   value: string;
-  options: Array<{ label: string; value: string }>;
+  options: Array<{ label: string; value: any }>;
   theme: "primary" | "secondary";
   label: string;
   name: string;
@@ -40,6 +40,7 @@ export default function Select({
           id={name}
           className="outline-none bg-transparent"
         >
+          <option>Select One</option>
           {options.map((item) => (
             <option key={item.label} value={item.value}>
               {item.label}

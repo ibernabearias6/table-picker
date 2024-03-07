@@ -39,9 +39,8 @@ model UserType {
 model Table {
   id             String @id @default(auto()) @map("_id") @db.ObjectId
   restaurantId   String @db.ObjectId
-  order          Int
-  capacity       Int
-  available      Boolean
+  order          String
+  capacity       String
   reservations   Reservation[]
   restaurant     Restaurant @relation(fields: [restaurantId], references: [id])
 }

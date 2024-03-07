@@ -43,7 +43,7 @@ export default function LogInPage() {
     const result = await response.json();
     if (response.status === 200) {
       saveUserInStore(result);
-      router.push("/app/reservation");
+      router.push("/home/reservation");
     } else {
       toast("Incorrect User!");
     }

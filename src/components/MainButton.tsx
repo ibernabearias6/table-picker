@@ -5,6 +5,7 @@ interface Props {
   loading?: boolean;
   disabled?: boolean;
   method?: () => void;
+  type?: "submit" | "button" | "reset";
   className?: string;
 }
 
@@ -14,10 +15,11 @@ export default function MainButton({
   method,
   disabled,
   className,
+  type = "submit",
 }: Props) {
   return (
     <button
-      type="submit"
+      type={type}
       className={`bg-violet-600 flex justify-center items-center rounded-2xl p-2 w-[250px] text-white disabled:opacity-60 ${className}`}
       disabled={disabled || loading}
       onClick={method}

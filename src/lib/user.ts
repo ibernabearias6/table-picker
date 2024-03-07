@@ -6,12 +6,19 @@ import {
   checkRestaurantExistence,
   createAsync as createRestaurantAsync,
 } from "./restaurant";
+import { redirect } from "next/navigation";
 
 export const getUserByCredential = async (user: string, password: string) => {
   let response: NextResponse = new NextResponse();
   const result = await prisma.user.findFirst({
     where: { user, password },
-    include: { type: true },
+    include: {
+      type: true,
+      reservations: true,
+      restaurants: {
+        include: { tables: true },
+      },
+    },
   });
   if (result) {
     response = NextResponse.json(result, {
@@ -97,17 +104,24 @@ const saveUserInDb = async (user: UserCreate, userTypeId: string) => {
 };
 
 export const saveUserInStore = (user: any) => {
-  localStorage.setItem("user", JSON.stringify(user));
+  if (typeof window !== "undefined") {
+    localStorage.setItem("user", JSON.stringify(user));
+  }
 };
 
 export const getUserInStore = () => {
-  const result = localStorage.getItem("user");
-  if (result) {
-    return JSON.parse(result);
+  if (typeof window !== "undefined") {
+    const result = localStorage.getItem("user");
+    if (result) {
+      return JSON.parse(result);
+    }
+    return null;
   }
-  return null;
 };
 
 export const logOut = () => {
-  localStorage.removeItem("user");
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("user");
+    redirect("/");
+  }
 };
