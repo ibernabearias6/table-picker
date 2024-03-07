@@ -13,6 +13,7 @@ model Restaurant {
   userId      String @db.ObjectId
   user        User @relation(fields: [userId], references: [id])
   available   Boolean
+  tables      Table[]
 }
 
 model User {
@@ -37,17 +38,17 @@ model UserType {
 
 model Table {
   id             String @id @default(auto()) @map("_id") @db.ObjectId
-  restaurantId   String
+  restaurantId   String @db.ObjectId
   order          Int
   capacity       Int
   available      Boolean
   reservations   Reservation[]
+  restaurant     Restaurant @relation(fields: [restaurantId], references: [id])
 }
 
 model Reservation {
   id                String @id @default(auto()) @map("_id") @db.ObjectId
   tableId           String @db.ObjectId
-  personsQuantity   Int
   date              DateTime
   endDate           DateTime
   userId            String @db.ObjectId

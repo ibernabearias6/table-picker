@@ -1,10 +1,12 @@
 "use client";
-
 import Input from "@/components/Input";
+import MainButton from "@/components/MainButton";
 import Select from "@/components/Select";
 import { UserCreate } from "@/models/user.interface";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 interface FormData {
@@ -20,6 +22,9 @@ interface FormData {
 }
 
 export default function SignUpPage() {
+  const [formErrors, setFormError] = useState({});
+  const [formLoading, setFormLoading] = useState(false);
+  const router = useRouter();
   const [form, setForm] = useState<FormData>({
     name: "",
     lastName: "",
@@ -31,6 +36,10 @@ export default function SignUpPage() {
     type: "",
     restaurantName: "",
   });
+
+  const hasFieldError = (field: string) => {
+    return formErrors.hasOwnProperty(field);
+  };
 
   const typeOptions = [
     {
@@ -62,6 +71,8 @@ export default function SignUpPage() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setFormError({});
+    setFormLoading(true);
     const payload: UserCreate = {
       user: form.userName,
       password: form.password,
@@ -79,8 +90,15 @@ export default function SignUpPage() {
         "Content-Type": "application/json",
       },
     });
-    const user = await response.json();
-    console.log(user, response);
+    const result = await response.json();
+    setFormLoading(false);
+
+    if ((result as object).hasOwnProperty("error")) {
+      setFormError({ ...formErrors, ...result.error });
+    } else {
+      toast("Your user is created!");
+      router.push("login");
+    }
   };
 
   const onInputChange = (name: string, value: string) => {
@@ -112,7 +130,7 @@ export default function SignUpPage() {
               theme="primary"
               label="Name"
               name="name"
-              disabled={false}
+              disabled={formLoading}
               onChange={(e) => onInputChange(e.target.name, e.target.value)}
             />
             <Input
@@ -121,7 +139,7 @@ export default function SignUpPage() {
               theme="primary"
               label="Last Name"
               name="lastName"
-              disabled={false}
+              disabled={formLoading}
               onChange={(e) => onInputChange(e.target.name, e.target.value)}
             />
             <Input
@@ -130,7 +148,7 @@ export default function SignUpPage() {
               theme="primary"
               label="Phone"
               name="phone"
-              disabled={false}
+              disabled={formLoading}
               onChange={(e) => onInputChange(e.target.name, e.target.value)}
             />
             <Input
@@ -139,7 +157,7 @@ export default function SignUpPage() {
               theme="primary"
               label="Email"
               name="email"
-              disabled={false}
+              disabled={formLoading}
               onChange={(e) => onInputChange(e.target.name, e.target.value)}
             />
             <Input
@@ -148,7 +166,9 @@ export default function SignUpPage() {
               theme="primary"
               label="User Name"
               name="userName"
-              disabled={false}
+              error={hasFieldError("userName")}
+              messageError="This name already exists"
+              disabled={formLoading}
               onChange={(e) => onInputChange(e.target.name, e.target.value)}
             />
             <Input
@@ -157,7 +177,7 @@ export default function SignUpPage() {
               theme="primary"
               label="Password"
               name="password"
-              disabled={false}
+              disabled={formLoading}
               onChange={(e) => onInputChange(e.target.name, e.target.value)}
             />
             <Input
@@ -168,7 +188,7 @@ export default function SignUpPage() {
               name="confirmPassword"
               error={form.password !== form.confirmPassword}
               messageError="Must be equal to password field"
-              disabled={false}
+              disabled={formLoading}
               onChange={(e) => onInputChange(e.target.name, e.target.value)}
             />
             <Select
@@ -177,6 +197,7 @@ export default function SignUpPage() {
               theme="primary"
               label="Type"
               name="type"
+              disabled={formLoading}
               onSelect={(e) =>
                 onInputChange(e.currentTarget.name, e.currentTarget.value)
               }
@@ -188,18 +209,19 @@ export default function SignUpPage() {
                 theme="primary"
                 label="Restaurant Name"
                 name="restaurantName"
-                disabled={false}
+                error={hasFieldError("restaurantName")}
+                messageError="This name already exists"
+                disabled={formLoading}
                 onChange={(e) => onInputChange(e.target.name, e.target.value)}
               />
             )}
           </div>
-          <button
-            type="submit"
-            className="bg-violet-600 rounded-2xl p-2 w-[250px] mt-8 disabled:opacity-60"
+          <MainButton
+            title="Create Acccount"
+            loading={formLoading}
             disabled={!isFormValid()}
-          >
-            Create Acccount
-          </button>
+            className="mt-8"
+          />
         </form>
       </section>
       <section className="flex justify-center items-center">

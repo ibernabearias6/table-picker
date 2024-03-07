@@ -3,7 +3,50 @@
 import Input from "@/components/Input";
 import Select from "@/components/Select";
 import { Trash, Pencil } from "lucide-react";
+import { useRouter } from 'next/navigation';
+import { FormEvent, useState } from 'react';
+
+interface FormData {
+  tableId: string;
+  personsQuantity: number;
+  date: string;
+  time: string;
+  userId: string;
+}
+
 export default function NewRestaurantPage() {
+  const [formErrors, setFormError] = useState({});
+  const [formLoading, setFormLoading] = useState(false);
+  const router = useRouter();
+  const [form, setForm] = useState<FormData>({
+    tableId: "",
+    personsQuantity: 0,
+    date: "",
+    time: "",
+    userId: "",
+  });
+
+  const hasFieldError = (field: string) => {
+    return formErrors.hasOwnProperty(field);
+  };
+
+  const isFormValid = () => {
+    return !!form.date && !!form.userId && !!form.personsQuantity && !!form.time && !!form.tableId;
+  }
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormError({});
+    setFormLoading(true);
+  }
+
+  const onInputChange = (name: string, value: string) => {
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
+
   return (
     <div className="mt-8">
       <h1 className="text-violet-950 text-4xl">New Restaurant</h1>
@@ -17,18 +60,17 @@ export default function NewRestaurantPage() {
           theme="secondary"
           label="Name"
           name="name"
-          placeholder=""
-          disabled={false}
-          onChange={(e) => {}}
+          disabled={formLoading}
+          onChange={(e) => onInputChange(e.target.name, e.target.value)}
         />
-        {/* <Select
+        <Select
           value={""}
           options={[]}
           theme="secondary"
           label="Available"
           name="available"
           onSelect={() => {}}
-        /> */}
+        />
       </div>
       <h2 className="text-2xl text-zinc-500 my-5">Tables</h2>
       <div className="grid grid-cols-3 row-auto mt-5 gap-x-10 gap-y-5 w-2/3">

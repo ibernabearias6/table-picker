@@ -3,7 +3,11 @@
 import Input from "@/components/Input";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
+import MainButton from "@/components/MainButton";
+import { saveUserInStore } from "@/lib/user";
 
 interface FormData {
   userName: string;
@@ -11,10 +15,40 @@ interface FormData {
 }
 
 export default function LogInPage() {
+  const router = useRouter();
+  const [formLoading, setFormLoading] = useState(false);
   const [form, setForm] = useState<FormData>({
     userName: "",
     password: "",
   });
+
+  const isFormValid = () => {
+    return form.userName && form.password;
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormLoading(true);
+    const payload = {
+      user: form.userName,
+      password: form.password,
+    };
+    const response = await fetch("/api/auth", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const result = await response.json();
+    if (response.status === 200) {
+      saveUserInStore(result);
+      router.push("/app/reservation");
+    } else {
+      toast("Incorrect User!");
+    }
+    setFormLoading(false);
+  };
 
   return (
     <div className="flex items-center justify-between mt-[7%]">
@@ -29,15 +63,17 @@ export default function LogInPage() {
             Sign up
           </Link>
         </div>
-        <form className="flex flex-col mt-8 w-[340px] gap-5">
+        <form
+          className="flex flex-col mt-8 w-[340px] gap-5"
+          onSubmit={handleSubmit}
+        >
           <Input
             value={form.userName}
             type="text"
             theme="primary"
             label="User Name"
             name="username"
-            placeholder=""
-            disabled={false}
+            disabled={formLoading}
             onChange={(e) => setForm({ ...form, userName: e.target.value })}
           />
           <Input
@@ -46,17 +82,16 @@ export default function LogInPage() {
             theme="primary"
             label="Password"
             name="password"
-            placeholder=""
             error={false}
-            disabled={false}
+            disabled={formLoading}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
-          <button
-            type="submit"
-            className="bg-violet-600 rounded-2xl p-2 w-[250px] mt-4"
-          >
-            Log In
-          </button>
+          <MainButton
+            title="Log In"
+            loading={formLoading}
+            disabled={!isFormValid()}
+            className="mt-8"
+          />
         </form>
       </section>
       <section className="flex justify-center items-center">

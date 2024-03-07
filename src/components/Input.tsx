@@ -3,7 +3,7 @@
 import { ChangeEvent } from "react";
 
 interface InputProps {
-  type: "text" | "number" | "email" | "password" | "date" | "time";
+  type: "text" | "number" | "email" | "password" | "date" | "time" | "datetime-local";
   theme?: "primary" | "secondary";
   label: string;
   value: string | number;
@@ -30,7 +30,7 @@ export default function Input({
   return (
     <div>
       <div
-        className={`flex flex-col rounded-xl px-3 py-1 border-[1px] focus-within:border-violet-600 hover:border-violet-600 ${theme === "primary" ? "bg-violet-600 bg-opacity-[29%] border-transparent text-white" : "bg-zinc-50 border-zinc-300 text-violet-900"}`}
+        className={`flex flex-col rounded-xl px-3 py-1 border-[1px] focus-within:border-violet-600 hover:border-violet-600 ${theme === "primary" ? "bg-violet-600 bg-opacity-[29%] border-transparent text-white" : "bg-zinc-50 border-zinc-300 text-violet-900"} ${disabled && "opacity-50"}`}
       >
         <label htmlFor={name} className="text-xs">
           {label}

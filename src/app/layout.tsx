@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import "./globals.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -23,7 +25,10 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/icons/favicon.png" />
       </head>
-      <body className={lato.className}>{children}</body>
+      <body className={lato.className}>
+        {children}
+        <ToastContainer />
+      </body>
     </html>
   );
 }
