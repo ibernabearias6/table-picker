@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import prisma from "../../prisma/index";
+import prisma from "./index";
 import { ReservationCreate } from "@/models/reservation.interface";
 
 export const updateAsync = async (reservationId: string, status: string) => {

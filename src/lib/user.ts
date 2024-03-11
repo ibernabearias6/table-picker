@@ -1,5 +1,5 @@
 import { UserCreate } from "@/models/user.interface";
-import prisma from "../../prisma/index";
+import prisma from "./index";
 import { NextResponse } from "next/server";
 import { RestaurantCreate } from "@/models/restaurant.interface";
 import {
@@ -122,6 +122,5 @@ export const getUserInStore = () => {
 export const logOut = () => {
   if (typeof window !== "undefined") {
     localStorage.removeItem("user");
-    
   }
 };

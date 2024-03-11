@@ -3,7 +3,7 @@ import {
   RestaurantEdit,
 } from "@/models/restaurant.interface";
 import { NextResponse } from "next/server";
-import prisma from "../../prisma/index";
+import prisma from "./index";
 
 export const getAllAsync = async () => {
   const restaurants = await prisma.restaurant.findMany({
