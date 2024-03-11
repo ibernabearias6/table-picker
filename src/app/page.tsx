@@ -27,13 +27,8 @@ export default function HomePage() {
       </article>
       <article className="flex justify-center items-center gap-3 font-[400] mt-10">
         <Link href="auth/login">
-          <button className="border border-violet-600 rounded-lg py-1 px-4 tracking-widest hover:bg-violet-600">
-            LOG IN
-          </button>
-        </Link>
-        <Link href="app/reservation/new">
           <button className="border bg-violet-600 border-violet-600 rounded-lg py-1 px-4 tracking-widest hover:bg-violet-700 hover:border-violet-700">
-            MAKE RESERVATON
+          LOG IN
           </button>
         </Link>
       </article>

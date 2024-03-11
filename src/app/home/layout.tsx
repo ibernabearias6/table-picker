@@ -3,6 +3,7 @@
 import NavBar from "@/components/NavBar";
 import { getUserInStore, logOut } from "@/lib/user";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function AppLayout({
   children,
@@ -10,6 +11,7 @@ export default function AppLayout({
   children: React.ReactNode;
 }>) {
   const user = getUserInStore();
+  const router = useRouter();
   const typeUser = user?.type?.type;
 
   return (
@@ -24,12 +26,16 @@ export default function AppLayout({
         <Link className="link" href="/home/reservation">
           Reservations
         </Link>
-        {typeUser === "Adm" && (
-          <Link className="link" href="/home/restaurant/edit">
-            Add Restaurant
-          </Link>
-        )}
-        <nav className="link" onClick={logOut}>
+        <Link className="link" href="/home/restaurant/edit">
+          My Restaurant
+        </Link>
+        <nav
+          className="link cursor-pointer"
+          onClick={() => {
+            logOut();
+            router.push("/");
+          }}
+        >
           LogOut
         </nav>
       </NavBar>

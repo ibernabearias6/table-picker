@@ -3,13 +3,8 @@
 import Input from "@/components/Input";
 import MainButton from "@/components/MainButton";
 import Select from "@/components/Select";
-import {
-  getUserInStore,
-  saveUserInStore,
-} from "@/lib/user";
+import { getUserInStore, saveUserInStore } from "@/lib/user";
 import { RestaurantEdit } from "@/models/restaurant.interface";
-import { Trash, Pencil } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -100,7 +95,6 @@ export default function MyRestaurantPage() {
     });
 
     if (response.status === 200) {
-      toast("Restaurant Updated!");
       const payload = {
         user: user.user,
         password: user.password,
@@ -114,6 +108,7 @@ export default function MyRestaurantPage() {
       });
       const result = await response.json();
       saveUserInStore(result);
+      toast("Restaurant Updated!");
     } else {
       toast("This name already exists!");
     }
@@ -139,17 +134,19 @@ export default function MyRestaurantPage() {
   useEffect(() => {
     const result = getUserInStore();
     setUser(result);
-    const restaurant = result.restaurants[0];
-    const resultTables = restaurant.tables.map((x: any) => ({
-      id: x.id,
-      order: x.order,
-      capacity: x.capacity,
-    }));
-    setForm({
-      name: restaurant.name,
-      available: restaurant.available,
-    });
-    setTables(resultTables || []);
+    const restaurant = result?.restaurants[0];
+    if (restaurant) {
+      const resultTables = restaurant.tables.map((x: any) => ({
+        id: x.id,
+        order: x.order,
+        capacity: x.capacity,
+      }));
+      setForm({
+        name: restaurant.name,
+        available: restaurant.available,
+      });
+      setTables(resultTables || []);
+    }
   }, [reload]);
 
   return (

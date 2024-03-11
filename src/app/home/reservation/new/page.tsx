@@ -41,6 +41,7 @@ export default function NewReservationPage() {
       userId: user.id,
       date: form.date,
       tableId: form.tableId,
+      restaurantId: form.restaurantId,
     };
     const response = await fetch("/api/reservation", {
       method: "POST",

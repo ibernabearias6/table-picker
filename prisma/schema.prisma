@@ -14,6 +14,7 @@ model Restaurant {
   user        User @relation(fields: [userId], references: [id])
   available   Boolean
   tables      Table[]
+  reservations   Reservation[]
 }
 
 model User {
@@ -51,7 +52,9 @@ model Reservation {
   date              DateTime
   endDate           DateTime
   userId            String @db.ObjectId
+  restaurantId      String @db.ObjectId
   status            String
   table             Table @relation(fields: [tableId], references: [id])
   user              User @relation(fields: [userId], references: [id])
+  restaurant        Restaurant @relation(fields: [restaurantId], references: [id])
 }

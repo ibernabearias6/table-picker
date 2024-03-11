@@ -122,6 +122,6 @@ export const getUserInStore = () => {
 export const logOut = () => {
   if (typeof window !== "undefined") {
     localStorage.removeItem("user");
-    redirect("/");
+    
   }
 };

@@ -1,4 +1,4 @@
-import { createAsync, getAsync } from "@/lib/reservation";
+import { createAsync, getAsync, updateAsync } from "@/lib/reservation";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -6,6 +6,21 @@ export async function POST(request: NextRequest) {
   try {
     const reservation = await request.json();
     const result = await createAsync(reservation);
+    response = result;
+  } catch (error: any) {
+    response = NextResponse.json(null, {
+      status: 500,
+      statusText: "Server error",
+    });
+  }
+  return response;
+}
+
+export async function PUT(request: NextRequest) {
+  let response;
+  try {
+    const { reservationId, status } = await request.json();
+    const result = await updateAsync(reservationId, status);
     response = result;
   } catch (error: any) {
     response = NextResponse.json(null, {
