@@ -3,7 +3,14 @@
 import { ChangeEvent } from "react";
 
 interface InputProps {
-  type: "text" | "number" | "email" | "password" | "date" | "time" | "datetime-local";
+  type:
+    | "text"
+    | "number"
+    | "email"
+    | "password"
+    | "date"
+    | "time"
+    | "datetime-local";
   theme?: "primary" | "secondary";
   label: string;
   value: string | number;
@@ -42,6 +49,7 @@ export default function Input({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
+          min={new Date().toISOString().slice(0, 16)}
           disabled={disabled}
           className="outline-none bg-transparent"
         />

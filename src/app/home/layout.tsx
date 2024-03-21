@@ -17,18 +17,19 @@ export default function AppLayout({
   return (
     <div className="relative h-screen">
       <NavBar theme="secondary">
-        <Link className="link" href="/">
-          Home
-        </Link>
-        <Link className="link" href="/home/reservation/new">
-          Add Reservation
-        </Link>
+        {typeUser === "User" && (
+          <Link className="link" href="/home/reservation/new">
+            Add Reservation
+          </Link>
+        )}
         <Link className="link" href="/home/reservation">
           Reservations
         </Link>
-        <Link className="link" href="/home/restaurant/edit">
-          My Restaurant
-        </Link>
+        {typeUser === "Adm" && (
+          <Link className="link" href="/home/restaurant/edit">
+            My Restaurant
+          </Link>
+        )}
         <nav
           className="link cursor-pointer"
           onClick={() => {

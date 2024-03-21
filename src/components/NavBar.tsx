@@ -1,16 +1,15 @@
 import Image from "next/image";
+import Link from "next/link";
 
-interface NavProps
-{
-  theme?: 'main' | 'secondary',
-  children: React.ReactNode
+interface NavProps {
+  theme?: "main" | "secondary";
+  children: React.ReactNode;
 }
-export default function NavBar({
-  theme = 'main',
-  children,
-}: NavProps) {
+export default function NavBar({ theme = "main", children }: NavProps) {
   return (
-    <div className={`flex items-center bg-violet-950 justify-between px-10 text-white ${theme === "main" ? "py-10" : "py-3"}`}>
+    <div
+      className={`flex items-center bg-violet-950 justify-between px-10 text-white ${theme === "main" ? "py-10" : "py-3"}`}
+    >
       <div className="flex gap-3">
         <Image src="/icons/favicon.png" width={35} height={35} alt="image" />
         <div className="flex gap-1 items-center capitalize">

@@ -225,7 +225,7 @@ export default function MyRestaurantPage() {
       </div>
 
       <MainButton
-        title="Add Restaurant"
+        title="Save"
         type="button"
         loading={formLoading}
         disabled={!isFormValid()}
